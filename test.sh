@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #LOG_DIR="/home/jxxxuan/gdrive/stock/logs/$(date +%Y)/$(date +%m)/$(date +%d)"
-LOG_DIR="/home/jxxxuan/stock_data/logs/$(date +%Y)/$(date +%m)/$(date +%d)"
+LOG_DIR="/mnt/predictor/stock_data/logs/$(date +%Y)/$(date +%m)/$(date +%d)"
 mkdir -p "$LOG_DIR"
 LOG_FILE="$LOG_DIR/test.log"
 
-SESSION="predictor"
+SESSION="Finch"
 
 tmux has-session -t $SESSION 2>/dev/null
 

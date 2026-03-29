@@ -15,5 +15,5 @@ if ! tmux has-session -t "$SESSION" 2>/dev/null; then
         echo "world"
 fi
 
-tmux send-keys -t $SESSION "cd /home/jxxxuan/github/predictor/symbol" C-m
-tmux send-keys -t $SESSION "/home/jxxxuan/github/predictor/venv/bin/python3 test.py 2>&1 | tee -a \"$LOG_FILE\"" C-m
+tmux send-keys -t $SESSION "cd /home/jxxxuan/github/Finch" C-m
+tmux send-keys -t $SESSION "/home/jxxxuan/github/Finch/venv/bin/python3 test.py 2>&1 | tee -a \"$LOG_FILE\"" C-m

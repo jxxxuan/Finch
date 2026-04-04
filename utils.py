@@ -15,8 +15,9 @@ RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL")
 SENDER_EMAIL_PASSWORD = os.getenv("SENDER_EMAIL_PASSWORD")
 
 def init_logging(log_dir, log_id):
+    safe_log_id = log_id.replace('*', 'all')
     os.makedirs(log_dir, exist_ok=True)
-    log_filename = os.path.join(log_dir,log_id)
+    log_filename = os.path.join(log_dir,safe_log_id)
     logging.basicConfig(
         filename=log_filename,
         level=logging.INFO,

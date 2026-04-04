@@ -11,7 +11,9 @@ from spider.news_updater import update_news
 from processor.process_main import run_process
 from processor.next_update_updater import update_by_interval, update_by_frequency
 from processor.delisted_updater import update_by_last_day
-#from backuper.backup_main import run_backup
+from backuper.backup_main import run_backup
+from backuper.stock_backuper import backup as backup_stock
+from backuper.database_backuper import backup as backup_database
 from datetime import datetime
 
 if __name__ == '__main__':
@@ -34,5 +36,6 @@ if __name__ == '__main__':
     run_process(update_by_interval, task_name='update_next_update(interval)',type='INTV')
     #run_process(update_by_last_day, task_name='delisted_updater', type = '')
 
-    #run_backup()
+    run_backup(backup_stock, task_name='backup_stock', type='*')
+    # run_backup(backup_database, task_name='backup_stock', type='*')
     #wait_until_next_task()

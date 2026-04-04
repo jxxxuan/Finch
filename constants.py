@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+BACKUP_PATH = os.getenv("BACKUP_PATH")
 # GOOGLE_DRIVE_PATH = os.getenv("GOOGLE_DRIVE_PATH")
 LOCAL_DRIVE_PATH = os.getenv("LOCAL_DRIVE_PATH")
 TEST_PATH = os.getenv("TEST_PATH")

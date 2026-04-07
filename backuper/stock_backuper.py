@@ -1,6 +1,6 @@
 import tarfile
 import os
-from constants import BACKUP_PATH, LOCAL_DRIVE_PATH, FILE_DIRS
+from constants import BACKUP_PATH, LOCAL_DRIVE_PATH
 from backuper.backup_main import manually_run_backup
 from datetime import datetime
 from pathlib import Path

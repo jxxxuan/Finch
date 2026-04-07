@@ -22,7 +22,7 @@ def run_backup(backup_function, task_name, type, num_worker=2, **kwargs):
 
         init_logging(log_dir, log_id)
 
-        types_to_process = FILE_DIRS if type == '*' else [type]
+        types_to_process = FILE_DIRS.keys() if type == '*' else [type]
         with ThreadPoolExecutor(max_workers=num_worker) as executor:
             with tqdm(total=len(types_to_process), desc=task_name, smoothing=0.9, ncols=120) as pbar:
                 futures = [executor.submit(backup_function, t, **kwargs) for t in types_to_process]

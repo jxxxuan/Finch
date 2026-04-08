@@ -37,11 +37,11 @@ def backup(type, **kwargs):
             tasks.append((source_path, target_path))
 
     if not tasks:
-        print(f"No subfolders found in {type}")
+        # print(f"No subfolders found in {type}")
         return
 
     # 4. 开启并行处理
-    print(f"--- Starting parallel backup for '{type}' ({len(tasks)} folders) ---")
+    # print(f"--- Starting parallel backup for '{type}' ({len(tasks)} folders) ---")
     
     # 根据你的 Y 盘带宽，建议 max_workers 设为 2-4
     with ProcessPoolExecutor(max_workers=4) as executor:

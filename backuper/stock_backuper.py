@@ -12,7 +12,7 @@ def make_targz(source_dir, output_filename):
         # arcname=os.path.basename(source_dir) 确保压缩包内不包含绝对路径
         tar.add(source_dir, arcname=os.path.basename(source_dir))
 
-def backup(type, **kwargs):
+def backup(type, num_worker, **kwargs):
     now = datetime.now()
     year = now.strftime('%Y')
     month = now.strftime('%m')
@@ -44,7 +44,7 @@ def backup(type, **kwargs):
     # print(f"--- Starting parallel backup for '{type}' ({len(tasks)} folders) ---")
     
     # 根据你的 Y 盘带宽，建议 max_workers 设为 2-4
-    with ProcessPoolExecutor(max_workers=4) as executor:
+    with ProcessPoolExecutor(max_workers=num_worker) as executor:
         # 使用 map 提交所有任务
         futures = [executor.submit(make_targz, src, dst) for src, dst in tasks]
 

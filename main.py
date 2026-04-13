@@ -36,6 +36,6 @@ if __name__ == '__main__':
     run_process(update_by_interval, task_name='update_next_update(interval)',type='INTV')
     #run_process(update_by_last_day, task_name='delisted_updater', type = '')
 
-    run_backup(backup_stock, task_name='backup_stock', type='*',num_worker=6)
+    run_backup(backup_stock, task_name='backup_stock', type='*',num_worker=4)
     # run_backup(backup_database, task_name='backup_database', type='*')
     #wait_until_next_task()

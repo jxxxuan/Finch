@@ -78,6 +78,7 @@ def update_by_interval(db_pool, type):
             else:
                 df = existed_df
             df['delay_days'] = df['delay_days'].astype(int)
+            df[type_next_update] = pd.to_datetime(df[type_next_update])
             # 更新数据库
             update_symbols_by_symbols(conn,type_next_update,df)
             

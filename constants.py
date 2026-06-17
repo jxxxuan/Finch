@@ -46,7 +46,7 @@ UPDATE_INTERVAL = {"news": relativedelta(days=1),
                    "cash_flow": relativedelta(months=2),
                    "balance_sheet": relativedelta(months=2),
                    "income_stmt": relativedelta(months=2),
-                   #"info":relativedelta(year=1)
+                   "info": relativedelta(months=1)
                    }
 
 UPDATE_FREQUENCY = {"news": 10000,"minute_history": 10000,}

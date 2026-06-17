@@ -13,16 +13,27 @@ PRODUCTION = os.getenv("PRODUCTION", "False").lower() == "true"
 table_name = "symbol_metadata" if PRODUCTION else "symbol_metadata_test"
 
 def update_symbols_by_symbols(conn, col, df):
-    # 简单的映射逻辑
-    dtype_map = {
-        'datetime64[ns]': 'TIMESTAMP',        # 对应所有 _check, _update 字段
-        'datetime64[ns, UTC]': 'TIMESTAMPTZ', # 对应 recommendations_first_month 等带时区的字段
-        'int64': 'INTEGER',                   # 对应 _count, _frequency 字段 (PG里int通常够用)
-        'float64': 'DOUBLE PRECISION',        # 对应可能的数值字段
-        'bool': 'BOOLEAN',                    # 对应 recommendations_record 字段
-        'object': 'VARCHAR(20)'               # 对应所有 _status 字段
-    }
-    sql_type = dtype_map.get(str(df[col].dtype), 'TEXT')
+    # 优先根据列名后缀推断 SQL 类型，避免 pandas object 类型转换偏差导致的错误
+    if col.endswith('_update') or col.endswith('_check'):
+        sql_type = 'TIMESTAMP'
+    elif col.endswith('_day') or col.endswith('_month'):
+        sql_type = 'TIMESTAMPTZ'
+    elif col.endswith('_record') or col.endswith('delisted'):
+        sql_type = 'BOOLEAN'
+    elif col.endswith('_count') or col.endswith('_frequency'):
+        sql_type = 'INTEGER'
+    elif col.endswith('_status'):
+        sql_type = 'VARCHAR(20)'
+    else:
+        dtype_map = {
+            'datetime64[ns]': 'TIMESTAMP',
+            'datetime64[ns, UTC]': 'TIMESTAMPTZ',
+            'int64': 'INTEGER',
+            'float64': 'DOUBLE PRECISION',
+            'bool': 'BOOLEAN',
+            'object': 'VARCHAR(20)'
+        }
+        sql_type = dtype_map.get(str(df[col].dtype), 'TEXT')
 
     temp_table = "temp_update"
 

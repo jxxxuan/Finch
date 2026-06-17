@@ -49,10 +49,14 @@ def update_info(name, db_pool):
     try:
         conn = db_pool.getconn()
 
-        file_dir = os.path.join(FILE_DIRS[type], name[0].upper())
+        now = pd.Timestamp.now()
+        year = str(now.year)
+        month = str(now.month).zfill(2)
+
+        file_dir = os.path.join(FILE_DIRS['info'], year, month, name[0].upper())
         file_path = os.path.join(file_dir, name + '.json')
         
-        data = get_info(name)
+        data = get_info(name, conn)
 
         if len(data) > 0:
             os.makedirs(file_dir,exist_ok=True)

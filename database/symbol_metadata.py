@@ -10,7 +10,7 @@ load_dotenv()
 
 PRODUCTION = os.getenv("PRODUCTION", "False").lower() == "true"
 
-table_name = "symbol_metadata" if PRODUCTION else "symbol_metadata_test"
+table_name = "symbol_metadata"
 
 def update_symbols_by_symbols(conn, col, df):
     # 优先根据列名后缀推断 SQL 类型，避免 pandas object 类型转换偏差导致的错误
@@ -111,6 +111,9 @@ def get_by_condition(conn,
     
     where_sql = f"WHERE {where}" if where else ""
     final_sql = f"{base_sql} {where_sql} LIMIT {limit};"
+
+    if params is not None:
+        params = tuple(params)
 
     with create_pandas_conn() as c:
         df = pd.read_sql(final_sql, c, params=params)

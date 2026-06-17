@@ -7,7 +7,7 @@ load_dotenv()
 
 PRODUCTION = os.getenv("PRODUCTION", "False").lower() == "true"
 
-table_name = "news" if PRODUCTION else "news_test"
+table_name = "news"
 
 def insert_news(conn, df):
     """

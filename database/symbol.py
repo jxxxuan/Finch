@@ -10,7 +10,7 @@ load_dotenv()
 
 PRODUCTION = os.getenv("PRODUCTION", "False").lower() == "true"
 
-table_name = "symbol" if PRODUCTION else "symbol_test"
+table_name = "symbol"
 
 def update_symbol_by_symbol(conn, symbol, data_dict):
     condition = "symbol = %s"
@@ -51,6 +51,9 @@ def get_by_condition(conn,
     
     where_sql = f"WHERE {where}" if where else ""
     final_sql = f"{base_sql} {where_sql} LIMIT {limit};"
+
+    if params is not None:
+        params = tuple(params)
 
     with create_pandas_conn() as c:
         df = pd.read_sql(final_sql, c, params=params)

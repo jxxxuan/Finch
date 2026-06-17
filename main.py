@@ -13,7 +13,7 @@ from processor.next_update_updater import update_by_interval, update_by_frequenc
 from processor.delisted_updater import update_by_last_day
 from backuper.backup_main import run_backup
 from backuper.stock_backuper import backup as backup_stock
-# from backuper.database_backuper import backup as backup_database
+from backuper.database_backuper import backup as backup_database
 from datetime import datetime
 
 if __name__ == '__main__':
@@ -37,5 +37,5 @@ if __name__ == '__main__':
     #run_process(update_by_last_day, task_name='delisted_updater', type = '')
 
     run_backup(backup_stock, task_name='backup_stock', type='*',num_worker=4)
-    # run_backup(backup_database, task_name='backup_database', type='*')
+    run_backup(backup_database, task_name='backup_database', type='*')
     #wait_until_next_task()

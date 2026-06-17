@@ -10,10 +10,11 @@ USERNAME = os.getenv("DB_USERNAME")
 PASSWORD = os.getenv("DB_PASSWORD")
 HOST = os.getenv("HOST")
 PRODUCTION = os.getenv("PRODUCTION", "False").lower() == "true"
+DB_NAME = os.getenv("DB_NAME", "predictor") if PRODUCTION else os.getenv("DB_NAME_DEV", "predictor_dev")
 
 def create_conn():
     return psycopg2.connect(
-        dbname="predictor",
+        dbname=DB_NAME,
         user=USERNAME,
         password=PASSWORD,
         host=HOST,
@@ -22,7 +23,7 @@ def create_conn():
 
 def create_pandas_conn():
     engine = create_engine(
-        f"postgresql+psycopg2://{USERNAME}:{PASSWORD}@{HOST}:5432/predictor"
+        f"postgresql+psycopg2://{USERNAME}:{PASSWORD}@{HOST}:5432/{DB_NAME}"
     )
     return engine.connect()
 
@@ -30,7 +31,7 @@ def create_db_pool(max_conn):
     return pool.SimpleConnectionPool(
         1,  # 最少连接数
         max_conn, # 最大连接数
-        dbname="predictor",
+        dbname=DB_NAME,
         user=USERNAME,
         password=PASSWORD,
         host=HOST,

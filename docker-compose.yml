@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # 1. API Server Service (Constantly running FastAPI data service)
+  api-server:
+    build: .
+    container_name: finch-api
+    restart: always
+    network_mode: "host"
+    volumes:
+      # Bind mounts matching your Linux server environment paths
+      - /mnt/predictor/stock_data:/mnt/predictor/stock_data
+      - /home/jxxxuan/share/test:/home/jxxxuan/share/test
+      - /home/jxxxuan/gdrive:/home/jxxxuan/gdrive
+    env_file:
+      - .env
+
+  # 2. Spider & Backup Job Runner (One-off execution container for running main.py)
+  spider-job:
+    build: .
+    container_name: finch-spider-runner
+    network_mode: "host"
+    volumes:
+      - /mnt/predictor/stock_data:/mnt/predictor/stock_data
+      - /home/jxxxuan/share/test:/home/jxxxuan/share/test
+      - /home/jxxxuan/gdrive:/home/jxxxuan/gdrive
+    env_file:
+      - .env
+    command: ["python", "main.py"]

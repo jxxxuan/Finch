@@ -22,6 +22,7 @@ def init_logging(log_dir, log_id):
         filename=log_filename,
         level=logging.INFO,
         format="%(asctime)s - %(threadName)s - %(levelname)s - %(message)s",
+        force=True
     )
     return log_filename
 

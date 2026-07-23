@@ -20,6 +20,7 @@ services:
   spider-job:
     image: finch-app:latest
     container_name: finch-spider-runner
+    restart: always
     network_mode: "host"
     volumes:
       - /mnt/predictor/stock_data:/mnt/predictor/stock_data
@@ -27,6 +28,7 @@ services:
       - /home/jxxxuan/gdrive:/home/jxxxuan/gdrive
     env_file:
       - .env
+    command: ["tail", "-f", "/dev/null"]
     labels:
       - "ofelia.enabled=true"
       - "ofelia.job-local.spider-run.cron=0 1 * * *"  # Run daily at 1:00 AM

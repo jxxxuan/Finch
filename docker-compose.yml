@@ -43,6 +43,6 @@ services:
       - spider-job
     labels:
       - "ofelia.enabled=true"
-      - "ofelia.job-exec.spider-run.schedule=0 1 * * *"  # Run daily at 1:00 AM
+      - "ofelia.job-exec.spider-run.schedule=0 0 * * *"  # Run daily at 12:00 AM (Midnight)
       - "ofelia.job-exec.spider-run.container=finch-spider-runner"
       - "ofelia.job-exec.spider-run.command=python main.py"

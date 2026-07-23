@@ -4,6 +4,7 @@ services:
   # 1. API Server Service (Constantly running FastAPI data service)
   api-server:
     build: .
+    image: finch-app:latest
     container_name: finch-api
     restart: always
     network_mode: "host"
@@ -15,9 +16,10 @@ services:
     env_file:
       - .env
 
-  # 2. Spider & Backup Job Runner (One-off execution container for running main.py)
+  # 2. Spider & Backup Job Runner (Triggered by Ofelia scheduler)
   spider-job:
     build: .
+    image: finch-app:latest
     container_name: finch-spider-runner
     network_mode: "host"
     volumes:
@@ -26,4 +28,18 @@ services:
       - /home/jxxxuan/gdrive:/home/jxxxuan/gdrive
     env_file:
       - .env
-    command: ["python", "main.py"]
+    labels:
+      - "ofelia.enabled=true"
+      - "ofelia.job-local.spider-run.cron=0 1 * * *"  # Run daily at 1:00 AM
+      - "ofelia.job-local.spider-run.command=python main.py"
+
+  # 3. Docker-Native Scheduler (Ofelia - consumes ~5MB RAM)
+  scheduler:
+    image: mcuadros/ofelia:latest
+    container_name: finch-scheduler
+    restart: always
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - spider-job

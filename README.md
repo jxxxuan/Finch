@@ -111,20 +111,31 @@ python -m uvicorn api.server:app --host 0.0.0.0 --port 8000
 docker compose build
 ```
 
-### 2. 启动 API 常驻服务
-以守护进程模式启动 API 数据端服务容器：
+### 2. 启动服务（API 与 定时任务调度器）
+使用以下命令在后台一键启动所有容器服务：
 ```bash
-docker compose up -d api-server
+docker compose up -d
 ```
-启动后，容器内运行的 FastAPI 将通过宿主机网络在端口 `8000` 上提供数据查询服务，您可以使用 `curl http://127.0.0.1:8000/health` 检查健康状态。
+启动后，系统将运行以下三个容器：
+- `finch-api`：常驻提供 FastAPI 接口数据服务。
+- `finch-scheduler` (Ofelia)：常驻定时调度器，每隔一秒扫描容器事件，监控并触发定时任务。
+- `finch-spider-runner`：爬虫与备份运行容器（默认静止，由调度器在指定时间唤醒并运行）。
 
-### 3. 定时触发爬虫与备份任务
-您可以通过 Docker Compose 容器以一次性运行（One-off）的形式，启动爬虫及归档备份流程：
+您可以运行 `curl http://127.0.0.1:8000/health` 检查 API 服务健康状态，或者运行以下命令查看定时任务状态：
 ```bash
-docker compose run --rm spider-job
+docker compose logs -f scheduler
 ```
-> 💡 **小贴士**：您可以将该命令写入 Linux 宿主机的 `crontab` 任务中，实现定时自动抓取，例如每天凌晨 1 点执行：
-> `0 1 * * * cd /home/jxxxuan/Github/Finch && /usr/bin/docker compose run --rm spider-job >> /home/jxxxuan/cron_spider.log 2>&1`
+
+### 3. 定时爬虫任务与手动触发
+*   **自动执行**：定时任务已经通过 `docker-compose.yml` 内置。默认会在**每天凌晨 1:00** 自动唤醒并运行，无需在宿主机配置任何 `crontab`。
+*   **手动触发爬虫**：如果您需要立即启动一次数据同步与备份，可以运行以下命令：
+    ```bash
+    docker compose run --rm spider-job
+    ```
+    或者通过调度器执行：
+    ```bash
+    docker compose exec scheduler ofelia run spider-run
+    ```
 
 
 ## 📊 数据载入与量化分析 (SDK)

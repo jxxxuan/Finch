@@ -13,6 +13,8 @@ services:
       - /mnt/predictor/stock_data:/mnt/predictor/stock_data
       - /home/jxxxuan/share/test:/home/jxxxuan/share/test
       - /home/jxxxuan/gdrive:/home/jxxxuan/gdrive
+    environment:
+      - TZ=Asia/Kuala_Lumpur
     env_file:
       - .env
 
@@ -27,6 +29,8 @@ services:
       - /mnt/predictor/stock_data:/mnt/predictor/stock_data
       - /home/jxxxuan/share/test:/home/jxxxuan/share/test
       - /home/jxxxuan/gdrive:/home/jxxxuan/gdrive
+    environment:
+      - TZ=Asia/Kuala_Lumpur
     env_file:
       - .env
     command: ["tail", "-f", "/dev/null"]
@@ -37,6 +41,8 @@ services:
     container_name: finch-scheduler
     restart: always
     command: daemon --docker
+    environment:
+      - TZ=Asia/Kuala_Lumpur
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     depends_on:

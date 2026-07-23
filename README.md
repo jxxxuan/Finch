@@ -127,7 +127,7 @@ docker compose logs -f scheduler
 ```
 
 ### 3. 定时爬虫任务与手动触发
-*   **自动执行**：定时任务已经通过 `docker-compose.yml` 内置。默认会在**每天凌晨 1:00** 自动唤醒并运行，无需在宿主机配置任何 `crontab`。
+*   **自动执行**：定时任务已经通过 `docker-compose.yml` 内置。默认会在**每天凌晨 12:00 (00:00)** 自动唤醒并运行，无需在宿主机配置任何 `crontab`。
 *   **手动触发爬虫**：如果您需要立即启动一次数据同步与备份，可以运行以下命令：
     ```bash
     docker compose run --rm spider-job

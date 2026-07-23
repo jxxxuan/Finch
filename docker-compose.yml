@@ -18,7 +18,6 @@ services:
 
   # 2. Spider & Backup Job Runner (Triggered by Ofelia scheduler)
   spider-job:
-    build: .
     image: finch-app:latest
     container_name: finch-spider-runner
     network_mode: "host"

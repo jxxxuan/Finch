@@ -16,8 +16,9 @@ services:
     env_file:
       - .env
 
-  # 2. Spider & Backup Job Runner (Triggered by Ofelia scheduler)
+  # 2. Spider & Backup Job Runner (Target execution container)
   spider-job:
+    build: .
     image: finch-app:latest
     container_name: finch-spider-runner
     restart: always
@@ -29,10 +30,6 @@ services:
     env_file:
       - .env
     command: ["tail", "-f", "/dev/null"]
-    labels:
-      - "ofelia.enabled=true"
-      - "ofelia.job-local.spider-run.schedule=0 1 * * *"  # Run daily at 1:00 AM
-      - "ofelia.job-local.spider-run.command=python main.py"
 
   # 3. Docker-Native Scheduler (Ofelia - consumes ~5MB RAM)
   scheduler:
@@ -44,3 +41,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     depends_on:
       - spider-job
+    labels:
+      - "ofelia.enabled=true"
+      - "ofelia.job-exec.spider-run.schedule=0 1 * * *"  # Run daily at 1:00 AM
+      - "ofelia.job-exec.spider-run.container=finch-spider-runner"
+      - "ofelia.job-exec.spider-run.command=python main.py"
